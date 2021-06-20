@@ -18,8 +18,10 @@ class Header extends React.Component {
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Brand>My Favorite Books</Navbar.Brand>
           <Link to="/">Home</Link>
+          {/* <Link to="/profile">Profile</Link> */}
+          
+          { this.props.auth0.isAuthenticated ? <Link to="/profile">Profile</Link> : <p> </p>}
 
-          <Link to="/profile">Profile</Link>
           {/* TODO: if the user is logged in, render the `LogoutButton` - if the user is logged out, render the `LoginButton` */}
          
            { this.props.auth0.isAuthenticated ? <LogoutButton/> : <LoginButton/>}
