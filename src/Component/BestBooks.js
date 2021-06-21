@@ -9,11 +9,11 @@ class BestBooks extends React.Component {
       <Carousel>
         {this.props.dataBooks.map((item) => {
           return (
-           
-            <Carousel.Item>
+              <Carousel.Item>
+                {console.log(item.url)}
               <img
                 className="d-block w-100"
-                src={`${item.url} slide&bg=373940`}
+                src={item.url}
                 alt="First slide"
               />
               <Carousel.Caption>
