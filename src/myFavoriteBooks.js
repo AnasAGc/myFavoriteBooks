@@ -2,12 +2,23 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./myFavoriteBooks.css";
 import BestBooks from "./Component/BestBooks";
-
+import BookFormModal from "./Component/BookFormModal";
 class MyFavoriteBooks extends React.Component {
-  render() {
-    return (
+  constructor(props){
+    super(props)
+    this.state={
+      
+    }
+  }
+  
 
-      <BestBooks dataBooks={this.props.dataBooks}/>
+  render() {
+
+
+    return (
+      <>
+         <BestBooks dataBooks={this.props.dataBooks} deletebook={this.props.deletebook}/>
+        </>
     );
   }
 }
