@@ -1,29 +1,32 @@
 
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Carousel from "react-bootstrap/Carousel";
+import {Button,Card} from "react-bootstrap";
 
 class BestBooks extends React.Component {
   render() {
     return (
-      <Carousel>
-        {this.props.dataBooks.map((item) => {
+      <div>
+        {this.props.dataBooks.map((item,idx) => {
           return (
-              <Carousel.Item>
-                {console.log(item.url)}
-              <img
-                className="d-block w-100"
-                src={item.url}
-                alt="First slide"
-              />
-              <Carousel.Caption>
-                <h3>{item.name}</h3>
-                <p>{item.description} </p>
-              </Carousel.Caption>
-            </Carousel.Item>
+           
+                <Card className="text-center" key={idx}>
+                <Card.Body>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Text>
+                  {item.description}
+                  </Card.Text>
+                  <Button variant="primary"  onClick={()=>this.props.deletebook(idx)}>Delete</Button>
+                </Card.Body>
+                <Card.Footer className="text-muted">2 days ago</Card.Footer>
+              </Card>
+
+
+
+
           );
         })}
-      </Carousel>
+      </div>
     );
   }
 }

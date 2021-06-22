@@ -7,22 +7,17 @@ class MyFavoriteBooks extends React.Component {
   constructor(props){
     super(props)
     this.state={
-      showModal:false,
+      
     }
   }
-  updateModal=()=>{
-    this.setState({
-      showModal:true,
-    })
-  }
+  
 
   render() {
 
 
     return (
       <>
-         <BestBooks dataBooks={this.props.dataBooks}/>
-          <BookFormModal flag={this.state.showModal} updatBook={this.updateModal}/>
+         <BestBooks dataBooks={this.props.dataBooks} deletebook={this.props.deletebook}/>
         </>
     );
   }
