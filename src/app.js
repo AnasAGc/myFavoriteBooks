@@ -4,11 +4,11 @@ import Login from "./login";
 import { withAuth0 } from "@auth0/auth0-react";
 import Profile from "./Component/profile";
 import axios from "axios";
-// import IsLoadingAndError from './IsLoadingAndError';
 import MyFavoriteBooks from "./myFavoriteBooks";
 import BookFormModal from "./Component/BookFormModal";
 import Footer from "./Footer";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import ModifyBookModal from "./Component/ModifyBookModal";
 
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +16,9 @@ class App extends React.Component {
     this.state = {
       data: [],
       showModal: false,
+      editFlag: false,
+      selectedItem: "",
+      idx:'',
     };
   }
 
@@ -38,35 +41,74 @@ class App extends React.Component {
     });
   };
 
-  getBookDataFromForm=  (event)=>{
+  getBookDataFromForm = (event) => {
     event.preventDefault();
     const bookInfo2 = {
       name: event.target.book.value,
       description: event.target.des.value,
-      status:event.target.Status.value,
-      email:this.props.auth0.user.email
-    }
-    let url=`http://localhost:3016/addbook`;
-      axios.post(url,bookInfo2).then((result)=>{
-      this.setState({ data:result.data,})
-    })
-    console.log(bookInfo2);
-  }
+      status: event.target.Status.value,
+      email: this.props.auth0.user.email,
 
+    };
+    // https://booksback.herokuapp.com/
+    let url = `${process.env.REACT_APP_URl}/addbook`;
+    axios.post(url, bookInfo2).then((result) => {
+      this.setState({ data: result.data });
+    });
+  };
 
+  deleteBook = (index) => {
+    const userName = { email: this.props.auth0.user.email };
+    let url = `${process.env.REACT_APP_URl}/deletebook/${index}`;
 
-  deleteBook = async(index)=>{
-    const userName = {
-      email:this.props.auth0.user.email
-        }
-    let result = await axios.delete(`http://localhost:3016/deletebook/${index}`,{ params: userName })
+    // let result = await axios.delete(`http://localhost:3016/deletebook/${index}`,{ params: userName })
+    // this.setState({
+    //   data:result.data
+    // })
+    axios.delete(url, { params: userName }).then((result) => {
+      this.setState({
+        data: result.data,
+      });
+    });
+  };
+  updateEditFlage = () => {
     this.setState({
-      data:result.data
+      editFlag: !this.state.editFlag,
+    });
+  };
+  updateEditdata = (item,index) => {
+    console.log(item,index);
+    this.setState({
+      selectedItem: item,
+      idx:index,
+    });
+  };
+
+  updateBook=(object)=>{
+    // CHECkout The DATA BEFOR SEND IT 
+    console.log(object);
+    const objectsBooks = {
+      name : object.name,
+      description : object.description,
+      status: object.status,
+      email:this.props.auth0.user.email,
+    }
+
+
+
+  
+    console.log(objectsBooks);
+    
+    let index=this.state.idx;
+     let url = `${process.env.REACT_APP_URl}/updatebook/${index}`;
+    // let url = `http://localhost:3016/updatebook/${index}`;
+    axios.put(url,objectsBooks).then((result)=>{
+      this.setState({
+        data: result.data,
+      });
     })
 
   }
-  
-
 
 
   render() {
@@ -81,8 +123,24 @@ class App extends React.Component {
             <Route exact path="/">
               {this.props.auth0.isAuthenticated ? (
                 <div>
-                  <MyFavoriteBooks dataBooks={this.state.data} deletebook={this.deleteBook} />
-                  <BookFormModal updatBook={this.updateModal} flag={this.state.showModal} bookInfo={this.getBookDataFromForm} />
+                  <MyFavoriteBooks
+                    updateEditdata={this.updateEditdata}
+                    updateEditFlage={this.updateEditFlage}
+                    dataBooks={this.state.data}
+                    deletebook={this.deleteBook}
+                  />
+
+                  <BookFormModal
+                    updatBook={this.updateModal}
+                    flag={this.state.showModal}
+                    bookInfo={this.getBookDataFromForm}
+                  />
+                  <ModifyBookModal
+                    item={this.state.selectedItem}
+                    updateEditFlage={this.updateEditFlage}
+                    editflage={this.state.editFlag}
+                    updateBook={this.updateBook}
+                  />
                 </div>
               ) : (
                 <Login />
