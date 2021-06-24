@@ -1,17 +1,20 @@
 
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./BestBooks.css";
 import {Button,Card} from "react-bootstrap";
+
 class BestBooks extends React.Component {
   
   updateputton=(item,idx)=>{
     this.props.updateEditFlage()
     this.props.updateEditdata(item,idx)
+    console.log(item);
     }
   
   render() {
     return (
-      <div>
+      <div className='books_card'>
         {this.props.dataBooks.map((item,idx) => {
           return (
            
@@ -24,7 +27,7 @@ class BestBooks extends React.Component {
                   <Button variant="primary"  onClick={()=>this.props.deletebook(idx)}>Delete</Button>
                   <Button variant="primary" onClick={()=>this.updateputton(item,idx)}>Update</Button>
                 </Card.Body>
-                <Card.Footer className="text-muted">2 days ago</Card.Footer>
+                <Card.Footer className="text-muted">{item.status}</Card.Footer>
               </Card>
 
           );
